@@ -36,7 +36,7 @@ Project Folder
 │
 ├── complaint_video/        # Video storage folder
 │
-└── README.md                                                                                       ```
+└── README.md                                                                                ```
 
 ## File Description
 
