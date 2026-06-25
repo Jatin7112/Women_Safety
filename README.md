@@ -17,25 +17,26 @@ The Women Safety and Complaint Management System is a web-based platform designe
 - Automatically detects user location.
 - Interactive map interface.
 
-## 📁Project Structure
+## 📂 Project Structure
 
+```text
 Project Folder
 │
-│── app.py                   # Flask backend
+├── app.py                  # Flask backend
 │
-│── templates/               # Frontend interface
-│   │── home.html
-│   │── index.html
+├── templates/              # Frontend interface
+│   ├── home.html
+│   ├── index.html
 │   └── route_finder.html
 │
-│── complaint/               # Folder containing CSV data
-│   │── instant_complaint.csv
-│   │── direct_complaint.csv
+├── complaint/              # Folder containing CSV data
+│   ├── instant_complaint.csv
+│   ├── direct_complaint.csv
 │   └── anonymous_complaint.csv
 │
-│── complaint_video          # Video storage folder
+├── complaint_video/        # Video storage folder
 │
-└── README.md   
+└── README.md                                                                                       ```
 
 ## File Description
 
