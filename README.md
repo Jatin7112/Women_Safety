@@ -17,7 +17,7 @@ The Women Safety and Complaint Management System is a web-based platform designe
 - Automatically detects user location.
 - Interactive map interface.
 
-## 📂 Project Structure
+# 📂 Project Structure
 
 ```text
 Project Folder
