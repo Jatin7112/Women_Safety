@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SafeGuard – All Complaints</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0; padding: 0;
+      background: #fceff9;
+    }
+    .container {
+      max-width: 800px;
+      margin: 30px auto;
+      padding: 20px;
+    }
+    .header {
+      text-align: center;
+      padding: 25px;
+      background: linear-gradient(135deg, #ff69b4, #c71585);
+      color: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+    .header h1 {
+      margin: 0; font-size: 2rem;
+    }
+    .section {
+      margin-top: 20px;
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      /* Ensure no external scrollbar on this section if content fits */
+      overflow: hidden; 
+    }
+    .form-group { margin-bottom: 15px; }
+    .form-group label { display: block; margin-bottom: 6px; font-weight: 600; }
+    .form-group input, .form-group select, .form-group textarea {
+      width: 100%; padding: 10px;
+      border: 1px solid #ddd; border-radius: 6px;
+      font-size: 1rem;
+    }
+    .form-group button {
+      background: #ff69b4;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 8px;
+      color: white;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .form-group button:hover { background: #c71585; }
+    .tabs { display: flex; gap: 15px; margin-bottom: 20px; }
+    .tabs label {
+      padding: 10px 15px;
+      background: #eee; border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .tabs input[type="radio"] { display: none; }
+    .tabs input[type="radio"]:checked + label {
+      background: #ff69b4; color: white;
+    }
+    #success-message, #error-message {
+      display: none; padding: 10px; border-radius: 8px; margin-bottom: 15px;
+      text-align: center;
+      font-weight: bold;
+    }
+    #success-message { background: #d4edda; color: #155724; border: 1px solid #c3e6cb;}
+    #error-message { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>SafeGuard Complaint Forms</h1>
+      <p>Submit a complaint instantly, anonymously, or directly.</p>
+    </div>
+
+    <div class="section">
+      <h2>Select Complaint Type</h2>
+      <div class="tabs">
+        <input type="radio" id="anonymous" name="complaint-type" value="anonymous" checked>
+        <label for="anonymous">Anonymous Complaint</label>
+        
+        <input type="radio" id="direct" name="complaint-type" value="direct">
+        <label for="direct">Direct Complaint</label>
+      </div>
+
+      <div id="success-message"></div>
+      <div id="error-message"></div>
+
+      <div id="anonymous-form">
+        <form id="anonymous-complaint-form">
+          <input type="hidden" name="type" value="anonymous">
+          <div class="form-group">
+            <label for="anon-title">Complaint Title</label>
+            <input type="text" id="anon-title" name="title" required>
+          </div>
+          <div class="form-group">
+            <label for="anon-category">Category</label>
+            <select id="anon-category" name="category" required>
+              <option value="">Select a category</option>
+              <option value="Safety">Safety</option>
+              <option value="Harassment">Harassment</option>
+              <option value="Infrastructure">Infrastructure</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="anon-description">Description</label>
+            <textarea id="anon-description" name="description" rows="5" required></textarea>
+          </div>
+            
+          <div class="form-group">
+            <label for="anon-video">Upload Video (optional)</label>
+            <input type="file" id="anon-video" name="video" accept="video/*">
+          </div>
+
+          
+          <div class="form-group">
+            <button type="submit">Submit Anonymous Complaint</button>
+          </div>
+        </form>
+      </div>
+
+      <div id="direct-form" style="display:none;">
+        <form id="direct-complaint-form">
+          <input type="hidden" name="type" value="direct">
+          <div class="form-group">
+            <label for="direct-name">Name</label>
+            <input type="text" id="direct-name" name="name" required>
+          </div>
+          <div class="form-group">
+            <label for="direct-email">Email</label>
+            <input type="email" id="direct-email" name="email" required>
+          </div>
+          <div class="form-group">
+            <label for="direct-phone">Phone</label>
+            <input type="tel" id="direct-phone" name="phone" required>
+          </div>
+          <div class="form-group">
+            <label for="direct-title">Complaint Title</label>
+            <input type="text" id="direct-title" name="title" required>
+          </div>
+          <div class="form-group">
+            <label for="direct-category">Category</label>
+            <select id="direct-category" name="category" required>
+              <option value="">Select a category</option>
+              <option value="Safety">Safety</option>
+              <option value="Harassment">Harassment</option>
+              <option value="Infrastructure">Infrastructure</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="direct-description">Description</label>
+            <textarea id="direct-description" name="description" rows="5" required></textarea>
+          </div>
+          <!-- video-->
+          <div class="form-group">
+            <label for="direct-video">Upload Video (optional)</label>
+            <input type="file" id="direct-video" name="video" accept="video/*">
+          </div>
+
+          <div class="form-group">
+            <button type="submit">Submit Direct Complaint</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Updated complaintTypes to exclude 'instant'
+    const complaintTypes = ['anonymous', 'direct'];
+    
+    // Function to switch visible form
+    function showForm(type) {
+        complaintTypes.forEach(formType => {
+            const formDiv = document.getElementById(formType + '-form');
+            // Ensure formDiv exists before trying to access its style property
+            if (formDiv) {
+              if (formType === type) {
+                  formDiv.style.display = 'block';
+              } else {
+                  formDiv.style.display = 'none';
+              }
+            }
+        });
+    }
+
+    // Event listeners for tab switching - Removed 'instant' listener
+    document.getElementById('anonymous').addEventListener('change', () => showForm('anonymous'));
+    document.getElementById('direct').addEventListener('change', () => showForm('direct'));
+    
+    // Initialize form display - Now shows 'anonymous' by default as it is checked
+    showForm('anonymous');
+
+    // Event listeners for form submission - Removed 'instant' listener
+    document.getElementById('anonymous-complaint-form').addEventListener('submit', (e) => submitComplaint(e, 'anonymous'));
+    document.getElementById('direct-complaint-form').addEventListener('submit', (e) => submitComplaint(e, 'direct'));
+
+    
+  async function submitComplaint(event, type) {
+    event.preventDefault();
+    const successMessage = document.getElementById('success-message');
+    const errorMessage = document.getElementById('error-message');
+    successMessage.style.display = 'none';
+    errorMessage.style.display = 'none';
+
+    const form = event.target;
+    const formData = new FormData(form); // keeps file input too
+    formData.append("type", type); // add complaint type
+
+    try {
+      const response = await fetch('/api/complaints', {
+        method: 'POST',
+        body: formData
+      });
+      const result = await response.json();
+
+      if (response.ok && result.success) {
+        successMessage.textContent = `Complaint registered successfully! Tracking ID: ${result.tracking_id}`;
+        successMessage.style.display = 'block';
+        form.reset();
+        setTimeout(() => { successMessage.style.display = 'none'; }, 5000);
+      } else {
+        errorMessage.textContent = 'Error submitting complaint: ' + (result.error || 'Server error.');
+        errorMessage.style.display = 'block';
+      }
+    } catch (error) {
+      errorMessage.textContent = 'Network Error: Could not connect to the server.';
+      errorMessage.style.display = 'block';
+    }
+}
+</script>
+</body>
+</html>

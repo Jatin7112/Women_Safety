@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SafeGuard — Women Safety Hub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --pink-50: #FDF2F8;
+            --pink-100: #FCE7F3;
+            --pink-200: #FBCFE8;
+            --pink-400: #F472B6;
+            --pink-500: #EC4899;
+            --pink-600: #DB2777;
+            --pink-700: #BE185D;
+            --pink-800: #9D174D;
+            --rose-50: #FFF1F2;
+            --rose-600: #E11D48;
+            --slate-50: #F8FAFC;
+            --slate-100: #F1F5F9;
+            --slate-200: #E2E8F0;
+            --slate-400: #94A3B8;
+            --slate-500: #64748B;
+            --slate-600: #475569;
+            --slate-700: #334155;
+            --slate-800: #1E293B;
+            --slate-900: #0F172A;
+            --white: #FFFFFF;
+            --font-display: 'Playfair Display', Georgia, serif;
+            --font-body: 'Inter', -apple-system, sans-serif;
+            --radius-sm: 6px;
+            --radius-md: 10px;
+            --radius-lg: 16px;
+            --radius-xl: 24px;
+            --radius-pill: 9999px;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
+            --shadow-md: 0 4px 16px rgba(0,0,0,0.08), 0 2px 6px rgba(0,0,0,0.04);
+            --shadow-lg: 0 12px 40px rgba(0,0,0,0.10), 0 4px 12px rgba(0,0,0,0.06);
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--slate-50);
+            color: var(--slate-800);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ── MODAL ─────────────────────────────────────────── */
+        .modal-backdrop {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.65);
+            backdrop-filter: blur(4px);
+            z-index: 9000;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+        .modal-backdrop.open { display: flex; }
+        body.modal-open { overflow: hidden; }
+
+        .modal-card {
+            background: var(--white);
+            width: 100%;
+            max-width: 540px;
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+            position: relative;
+            animation: slideUp 0.3s ease;
+        }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        .modal-header {
+            background: linear-gradient(135deg, var(--pink-600) 0%, var(--pink-800) 100%);
+            padding: 2rem 2rem 1.5rem;
+            color: var(--white);
+            position: relative;
+        }
+        .modal-header .shield-icon {
+            width: 48px; height: 48px;
+            background: rgba(255,255,255,0.18);
+            border-radius: var(--radius-md);
+            display: flex; align-items: center; justify-content: center;
+            margin-bottom: 1rem;
+            font-size: 24px;
+        }
+        .modal-header h2 {
+            font-family: var(--font-display);
+            font-size: 1.5rem; font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+        .modal-header p { font-size: 0.875rem; opacity: 0.85; }
+        .modal-close {
+            position: absolute; top: 1rem; right: 1rem;
+            width: 32px; height: 32px;
+            background: rgba(255,255,255,0.2);
+            border: none; border-radius: 50%;
+            color: white; font-size: 1.1rem;
+            cursor: pointer; display: flex; align-items: center; justify-content: center;
+            transition: background 0.2s;
+        }
+        .modal-close:hover { background: rgba(255,255,255,0.35); }
+        .modal-body { padding: 1.75rem 2rem 2rem; }
+        .form-group { margin-bottom: 1.25rem; }
+        .form-group label {
+            display: block; font-size: 0.8125rem; font-weight: 600;
+            color: var(--slate-600); margin-bottom: 0.4rem; letter-spacing: 0.03em;
+            text-transform: uppercase;
+        }
+        .form-group input,
+        .form-group textarea {
+            width: 100%; padding: 0.75rem 1rem;
+            border: 1.5px solid var(--slate-200);
+            border-radius: var(--radius-md);
+            font-family: var(--font-body); font-size: 0.9375rem;
+            color: var(--slate-800); background: var(--white);
+            transition: border-color 0.2s, box-shadow 0.2s;
+            outline: none;
+        }
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: var(--pink-500);
+            box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.12);
+        }
+        .form-group textarea { resize: vertical; min-height: 110px; }
+        .btn-primary {
+            width: 100%; padding: 0.875rem;
+            background: var(--pink-600);
+            color: var(--white); border: none;
+            border-radius: var(--radius-md);
+            font-family: var(--font-body); font-size: 1rem; font-weight: 600;
+            cursor: pointer; letter-spacing: 0.01em;
+            transition: background 0.2s, transform 0.15s;
+            display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+        }
+        .btn-primary:hover { background: var(--pink-700); }
+        .btn-primary:active { transform: scale(0.98); }
+        .btn-primary .btn-icon { font-size: 1.1rem; }
+
+        /* ── NAV ────────────────────────────────────────────── */
+        nav {
+            position: fixed; top: 0; left: 0; right: 0;
+            z-index: 500;
+            padding: 0 2rem;
+            height: 68px;
+            display: flex; align-items: center; justify-content: space-between;
+            transition: background 0.3s, box-shadow 0.3s;
+        }
+        nav.scrolled {
+            background: rgba(255,255,255,0.96);
+            backdrop-filter: blur(12px);
+            box-shadow: 0 1px 0 var(--slate-200);
+        }
+        .nav-logo {
+            display: flex; align-items: center; gap: 0.6rem;
+            font-family: var(--font-display); font-weight: 700;
+            font-size: 1.1rem; color: var(--white); text-decoration: none;
+            transition: color 0.3s;
+        }
+        nav.scrolled .nav-logo { color: var(--pink-700); }
+        .nav-logo-icon {
+            width: 34px; height: 34px;
+            background: var(--pink-600);
+            border-radius: var(--radius-sm);
+            display: flex; align-items: center; justify-content: center;
+            color: white; font-size: 16px; font-weight: 700;
+            flex-shrink: 0;
+        }
+        .nav-links { display: flex; align-items: center; gap: 0.5rem; }
+        .nav-link {
+            padding: 0.4rem 0.9rem;
+            border-radius: var(--radius-pill);
+            font-size: 0.875rem; font-weight: 500;
+            text-decoration: none; color: rgba(255,255,255,0.85);
+            transition: all 0.2s;
+        }
+        .nav-link:hover { color: white; background: rgba(255,255,255,0.15); }
+        nav.scrolled .nav-link { color: var(--slate-600); }
+        nav.scrolled .nav-link:hover { color: var(--slate-900); background: var(--slate-100); }
+        .nav-cta {
+            padding: 0.45rem 1.1rem;
+            background: var(--pink-600); color: white;
+            border-radius: var(--radius-pill);
+            font-size: 0.875rem; font-weight: 600;
+            text-decoration: none;
+            transition: background 0.2s;
+        }
+        .nav-cta:hover { background: var(--pink-700); }
+        nav.scrolled .nav-cta { background: var(--pink-600); }
+
+        /* ── HERO ───────────────────────────────────────────── */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex; align-items: center;
+            overflow: hidden;
+            background: var(--slate-900);
+        }
+        .hero-bg {
+            position: absolute; inset: 0;
+            background-image: url('https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=1600&q=80');
+            background-size: cover; background-position: center 30%;
+            opacity: 0.35;
+        }
+        .hero-overlay {
+            position: absolute; inset: 0;
+            background: linear-gradient(135deg, rgba(15,23,42,0.92) 0%, rgba(157,23,77,0.55) 100%);
+        }
+        .hero-content {
+            position: relative; z-index: 2;
+            max-width: 1200px; margin: 0 auto;
+            padding: 7rem 2rem 5rem;
+            display: grid; grid-template-columns: 1fr 1fr;
+            gap: 4rem; align-items: center;
+        }
+        .hero-badge {
+            display: inline-flex; align-items: center; gap: 0.4rem;
+            background: rgba(236, 72, 153, 0.2);
+            border: 1px solid rgba(244, 114, 182, 0.3);
+            color: var(--pink-200, #FBCFE8);
+            border-radius: var(--radius-pill);
+            font-size: 0.8125rem; font-weight: 600;
+            padding: 0.3rem 0.9rem; margin-bottom: 1.5rem;
+            letter-spacing: 0.04em;
+        }
+        .hero-badge span { width: 6px; height: 6px; background: var(--pink-400); border-radius: 50%; display: inline-block; animation: pulse 1.8s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+        .hero h1 {
+            font-family: var(--font-display);
+            font-size: clamp(2.4rem, 5vw, 3.75rem);
+            font-weight: 700; color: var(--white);
+            line-height: 1.15; margin-bottom: 1.25rem;
+        }
+        .hero h1 em { font-style: normal; color: var(--pink-400); }
+        .hero p {
+            font-size: 1.0625rem; color: rgba(255,255,255,0.72);
+            margin-bottom: 2rem; max-width: 480px; line-height: 1.75;
+        }
+        .hero-actions { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+        .btn-hero-primary {
+            padding: 0.875rem 1.75rem;
+            background: var(--pink-600); color: white;
+            border: none; border-radius: var(--radius-md);
+            font-family: var(--font-body); font-size: 0.9375rem; font-weight: 600;
+            cursor: pointer; text-decoration: none;
+            transition: background 0.2s, transform 0.15s;
+            display: inline-flex; align-items: center; gap: 0.5rem;
+        }
+        .btn-hero-primary:hover { background: var(--pink-700); transform: translateY(-1px); }
+        .btn-hero-secondary {
+            padding: 0.875rem 1.75rem;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border: 1.5px solid rgba(255,255,255,0.25);
+            border-radius: var(--radius-md);
+            font-family: var(--font-body); font-size: 0.9375rem; font-weight: 500;
+            cursor: pointer; text-decoration: none;
+            transition: background 0.2s;
+            display: inline-flex; align-items: center; gap: 0.5rem;
+        }
+        .btn-hero-secondary:hover { background: rgba(255,255,255,0.18); }
+        .hero-stats {
+            display: flex; gap: 2rem; margin-top: 2.5rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        .hero-stat-num {
+            font-family: var(--font-display);
+            font-size: 1.75rem; font-weight: 700;
+            color: var(--white); line-height: 1;
+        }
+        .hero-stat-label { font-size: 0.8125rem; color: rgba(255,255,255,0.5); margin-top: 0.2rem; }
+
+        /* Hero right — feature cards */
+        .hero-cards { display: flex; flex-direction: column; gap: 1rem; }
+        .hero-feature-card {
+            background: rgba(255,255,255,0.07);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: var(--radius-lg);
+            padding: 1.25rem 1.5rem;
+            display: flex; align-items: flex-start; gap: 1rem;
+            backdrop-filter: blur(8px);
+            transition: background 0.2s, transform 0.2s;
+            cursor: default;
+        }
+        .hero-feature-card:hover { background: rgba(255,255,255,0.11); transform: translateX(4px); }
+        .hfc-icon {
+            width: 44px; height: 44px; flex-shrink: 0;
+            border-radius: var(--radius-md);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.2rem;
+        }
+        .hfc-icon.pink { background: rgba(236,72,153,0.25); color: var(--pink-400); }
+        .hfc-icon.blue { background: rgba(59,130,246,0.2); color: #93C5FD; }
+        .hfc-icon.green { background: rgba(34,197,94,0.2); color: #86EFAC; }
+        .hfc-title { font-size: 0.9375rem; font-weight: 600; color: white; margin-bottom: 0.15rem; }
+        .hfc-desc { font-size: 0.8125rem; color: rgba(255,255,255,0.55); line-height: 1.5; }
+
+        /* ── EMERGENCY BANNER ──────────────────────────────── */
+        .emergency-banner {
+            background: var(--rose-50);
+            border-bottom: 1px solid #FECDD3;
+            padding: 0.75rem 2rem;
+            display: flex; align-items: center; justify-content: center; gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+        .emergency-banner .label {
+            font-size: 0.8125rem; font-weight: 700; color: var(--rose-600);
+            text-transform: uppercase; letter-spacing: 0.08em;
+        }
+        .sos-numbers { display: flex; gap: 1rem; flex-wrap: wrap; }
+        .sos-chip {
+            display: flex; align-items: center; gap: 0.4rem;
+            background: white;
+            border: 1px solid #FECDD3;
+            border-radius: var(--radius-pill);
+            padding: 0.25rem 0.75rem;
+            font-size: 0.8125rem; font-weight: 600; color: var(--slate-700);
+            text-decoration: none; transition: background 0.2s;
+        }
+        .sos-chip:hover { background: var(--rose-50); }
+        .sos-chip .dot { width: 7px; height: 7px; background: var(--rose-600); border-radius: 50%; }
+
+        /* ── SECTION COMMON ────────────────────────────────── */
+        section { padding: 5rem 2rem; }
+        .container { max-width: 1100px; margin: 0 auto; }
+        .section-eyebrow {
+            font-size: 0.75rem; font-weight: 700; letter-spacing: 0.12em;
+            text-transform: uppercase; color: var(--pink-600);
+            margin-bottom: 0.75rem;
+        }
+        .section-title {
+            font-family: var(--font-display);
+            font-size: clamp(1.75rem, 3vw, 2.25rem);
+            font-weight: 700; color: var(--slate-900);
+            margin-bottom: 1rem; line-height: 1.2;
+        }
+        .section-subtitle {
+            font-size: 1rem; color: var(--slate-500); max-width: 560px; line-height: 1.75;
+        }
+
+        /* ── RESOURCES ─────────────────────────────────────── */
+        #resources { background: var(--white); }
+        .resources-grid {
+            display: grid; grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem; margin-top: 3rem;
+        }
+        .resource-card {
+            background: var(--white);
+            border: 1.5px solid var(--slate-200);
+            border-radius: var(--radius-lg);
+            padding: 1.75rem;
+            transition: border-color 0.2s, box-shadow 0.25s, transform 0.25s;
+            position: relative; overflow: hidden;
+        }
+        .resource-card::before {
+            content: '';
+            position: absolute; top: 0; left: 0; right: 0;
+            height: 3px; background: var(--pink-500);
+            transform: scaleX(0); transform-origin: left;
+            transition: transform 0.3s;
+        }
+        .resource-card:hover {
+            border-color: var(--pink-200);
+            box-shadow: var(--shadow-md);
+            transform: translateY(-3px);
+        }
+        .resource-card:hover::before { transform: scaleX(1); }
+        .rc-icon-wrap {
+            width: 52px; height: 52px;
+            border-radius: var(--radius-md);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.4rem; margin-bottom: 1.25rem;
+        }
+        .rc-icon-wrap.pink { background: var(--pink-50); }
+        .rc-icon-wrap.purple { background: #F5F3FF; }
+        .rc-icon-wrap.blue { background: #EFF6FF; }
+        .resource-card h3 {
+            font-size: 1.0625rem; font-weight: 600;
+            color: var(--slate-900); margin-bottom: 0.5rem;
+        }
+        .resource-card p { font-size: 0.875rem; color: var(--slate-500); line-height: 1.65; margin-bottom: 1.25rem; }
+        .rc-link {
+            font-size: 0.875rem; font-weight: 600; color: var(--pink-600);
+            text-decoration: none; display: inline-flex; align-items: center; gap: 0.3rem;
+            transition: gap 0.2s;
+        }
+        .rc-link:hover { gap: 0.6rem; }
+        .rc-link .arrow { font-size: 1rem; }
+
+        /* ── MISSION ───────────────────────────────────────── */
+        #mission {
+            background: linear-gradient(135deg, #1E293B 0%, #4A1628 100%);
+            color: white;
+        }
+        .mission-inner {
+            display: grid; grid-template-columns: 1fr 1fr;
+            gap: 4rem; align-items: center;
+        }
+        .mission-text .section-title { color: white; }
+        .mission-text .section-subtitle { color: rgba(255,255,255,0.65); }
+        .mission-values { margin-top: 2rem; display: flex; flex-direction: column; gap: 1rem; }
+        .value-row {
+            display: flex; align-items: flex-start; gap: 1rem;
+            padding: 1rem 1.25rem;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: var(--radius-md);
+        }
+        .value-icon { font-size: 1.25rem; margin-top: 1px; flex-shrink: 0; }
+        .value-title { font-size: 0.9375rem; font-weight: 600; color: white; margin-bottom: 0.15rem; }
+        .value-desc { font-size: 0.8125rem; color: rgba(255,255,255,0.55); }
+        .mission-visual {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: var(--radius-xl);
+            padding: 2rem;
+        }
+        .stat-showcase { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+        .stat-box {
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            text-align: center;
+        }
+        .stat-box-num {
+            font-family: var(--font-display);
+            font-size: 2rem; font-weight: 700; color: var(--pink-400);
+            line-height: 1;
+        }
+        .stat-box-label { font-size: 0.8125rem; color: rgba(255,255,255,0.5); margin-top: 0.4rem; }
+
+        /* ── SAFETY TIPS ───────────────────────────────────── */
+        #tips { background: var(--pink-50); }
+        .tips-tabs {
+            display: flex; gap: 0.5rem; margin-bottom: 2.5rem; flex-wrap: wrap;
+        }
+        .tip-tab {
+            padding: 0.45rem 1rem;
+            background: white;
+            border: 1.5px solid var(--slate-200);
+            border-radius: var(--radius-pill);
+            font-size: 0.875rem; font-weight: 500; color: var(--slate-600);
+            cursor: pointer; transition: all 0.2s;
+        }
+        .tip-tab.active {
+            background: var(--pink-600);
+            border-color: var(--pink-600);
+            color: white;
+        }
+        .tips-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+        .tip-card {
+            background: white;
+            border: 1.5px solid var(--slate-200);
+            border-radius: var(--radius-lg);
+            padding: 1.25rem 1.5rem;
+            display: flex; align-items: flex-start; gap: 1rem;
+            transition: box-shadow 0.2s, transform 0.2s;
+        }
+        .tip-card:hover { box-shadow: var(--shadow-sm); transform: translateY(-2px); }
+        .tip-num {
+            width: 32px; height: 32px; flex-shrink: 0;
+            background: var(--pink-50);
+            border: 1.5px solid var(--pink-200);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.8125rem; font-weight: 700; color: var(--pink-700);
+        }
+        .tip-card h4 { font-size: 0.9375rem; font-weight: 600; color: var(--slate-800); margin-bottom: 0.25rem; }
+        .tip-card p { font-size: 0.8125rem; color: var(--slate-500); line-height: 1.6; }
+
+        /* ── NEWSLETTER ────────────────────────────────────── */
+        #subscribe { background: var(--white); }
+        .subscribe-card {
+            background: linear-gradient(135deg, var(--pink-600) 0%, var(--pink-800) 100%);
+            border-radius: var(--radius-xl);
+            padding: 4rem 3rem;
+            text-align: center; color: white;
+            position: relative; overflow: hidden;
+        }
+        .subscribe-card::before {
+            content: ''; position: absolute;
+            width: 300px; height: 300px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 50%;
+            top: -80px; right: -80px;
+        }
+        .subscribe-card::after {
+            content: ''; position: absolute;
+            width: 200px; height: 200px;
+            background: rgba(255,255,255,0.04);
+            border-radius: 50%;
+            bottom: -60px; left: -60px;
+        }
+        .subscribe-card h2 {
+            font-family: var(--font-display);
+            font-size: 2rem; font-weight: 700; margin-bottom: 0.75rem;
+        }
+        .subscribe-card p { font-size: 1rem; opacity: 0.8; margin-bottom: 2rem; }
+        .subscribe-form {
+            display: flex; max-width: 440px; margin: 0 auto;
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.25);
+            border-radius: var(--radius-md);
+            overflow: hidden; position: relative; z-index: 1;
+        }
+        .subscribe-form input {
+            flex: 1; padding: 0.875rem 1.25rem;
+            background: transparent; border: none; outline: none;
+            color: white; font-family: var(--font-body); font-size: 0.9375rem;
+        }
+        .subscribe-form input::placeholder { color: rgba(255,255,255,0.55); }
+        .subscribe-form button {
+            padding: 0.875rem 1.5rem;
+            background: white; color: var(--pink-700);
+            border: none; font-family: var(--font-body);
+            font-size: 0.9rem; font-weight: 700;
+            cursor: pointer; white-space: nowrap;
+            transition: background 0.2s;
+        }
+        .subscribe-form button:hover { background: var(--pink-50); }
+
+        /* ── FOOTER ────────────────────────────────────────── */
+        footer {
+            background: var(--slate-900);
+            color: rgba(255,255,255,0.6);
+            padding: 3rem 2rem 2rem;
+        }
+        .footer-inner {
+            max-width: 1100px; margin: 0 auto;
+            display: flex; justify-content: space-between;
+            align-items: flex-start; gap: 2rem;
+            flex-wrap: wrap; margin-bottom: 2rem;
+        }
+        .footer-brand .nav-logo { color: white; }
+        .footer-tagline { font-size: 0.8125rem; color: rgba(255,255,255,0.4); margin-top: 0.5rem; }
+        .footer-links { display: flex; gap: 1.5rem; flex-wrap: wrap; }
+        .footer-links a {
+            font-size: 0.875rem; color: rgba(255,255,255,0.5);
+            text-decoration: none; transition: color 0.2s;
+        }
+        .footer-links a:hover { color: white; }
+        .footer-bottom {
+            max-width: 1100px; margin: 0 auto;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255,255,255,0.08);
+            display: flex; justify-content: space-between;
+            font-size: 0.8125rem; color: rgba(255,255,255,0.3);
+            flex-wrap: wrap; gap: 0.5rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-content { grid-template-columns: 1fr; gap: 2rem; }
+            .hero-cards { display: none; }
+            .resources-grid { grid-template-columns: 1fr; }
+            .mission-inner { grid-template-columns: 1fr; }
+            .tips-grid { grid-template-columns: 1fr; }
+            .footer-inner { flex-direction: column; }
+        }
+        @media (max-width: 540px) {
+            nav { padding: 0 1rem; }
+            .nav-links .nav-link { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ═══ MODAL ═══════════════════════════════════════════════════════ -->
+<div id="complaint-modal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal-card">
+        <div class="modal-header">
+            <div class="shield-icon" aria-hidden="true">🛡️</div>
+            <button class="modal-close" onclick="closeModal()" aria-label="Close">&times;</button>
+            <h2 id="modal-title">File a complaint</h2>
+            <p>Your report is confidential. We're here to help you.</p>
+        </div>
+        <div class="modal-body">
+            <form id="instant-form" class="complaint-form" action="/api/complaints" method="POST" novalidate>
+                <input type="hidden" name="type" value="instant">
+                <div class="form-group">
+                    <label for="instant-phone">Phone number</label>
+                    <input type="tel" id="instant-phone" name="phone" placeholder="+91 XXXXX XXXXX" required>
+                </div>
+                <div class="form-group">
+                    <label for="instant-description">Describe the incident</label>
+                    <textarea id="instant-description" name="description" placeholder="Share what happened — as much or as little as you're comfortable with." required></textarea>
+                </div>
+                <button type="submit" class="btn-primary">
+                    <span class="btn-icon" aria-hidden="true">📤</span>
+                    Submit complaint
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- ═══ NAV ══════════════════════════════════════════════════════════ -->
+<nav id="main-nav" role="navigation" aria-label="Main navigation">
+    <a href="/" class="nav-logo">
+        <div class="nav-logo-icon" aria-hidden="true">S</div>
+        SafeGuard
+    </a>
+    <div class="nav-links">
+        <a href="#resources" class="nav-link">Resources</a>
+        <a href="#mission" class="nav-link">Our Mission</a>
+        <a href="#tips" class="nav-link">Safety Tips</a>
+        <a href="index.html" class="nav-cta">File a Complaint</a>
+    </div>
+</nav>
+
+<!-- ═══ HERO ══════════════════════════════════════════════════════════ -->
+<section class="hero" aria-label="Hero section">
+    <div class="hero-bg" role="img" aria-label="Background image"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content container">
+        <div>
+            <div class="hero-badge">
+                <span></span> Live Support Available
+            </div>
+            <h1>
+                Your safety is<br>
+                <em>our priority</em>
+            </h1>
+            <p>SafeGuard empowers women with real-time resources, quick complaint filing, and community support — because every woman deserves to feel safe, everywhere.</p>
+            <div class="hero-actions">
+                <a href="#resources" class="btn-hero-primary">🛡️ Explore Resources</a>
+                <a href="/route_finder" class="btn-hero-secondary">🗺️ Safe Route Finder</a>
+            </div>
+            <div class="hero-stats">
+                <div>
+                    <div class="hero-stat-num">10K+</div>
+                    <div class="hero-stat-label">Women helped</div>
+                </div>
+                <div>
+                    <div class="hero-stat-num">24/7</div>
+                    <div class="hero-stat-label">Support available</div>
+                </div>
+                <div>
+                    <div class="hero-stat-num">50+</div>
+                    <div class="hero-stat-label">Partner NGOs</div>
+                </div>
+            </div>
+        </div>
+        <div class="hero-cards" aria-hidden="true">
+            <div class="hero-feature-card">
+                <div class="hfc-icon pink">🆘</div>
+                <div>
+                    <div class="hfc-title">Instant complaint filing</div>
+                    <div class="hfc-desc">Report incidents in under 60 seconds, tracked and confidential.</div>
+                </div>
+            </div>
+            <div class="hero-feature-card">
+                <div class="hfc-icon blue">📍</div>
+                <div>
+                    <div class="hfc-title">Safe route planner</div>
+                    <div class="hfc-desc">Navigate to your destination using community-verified safe routes.</div>
+                </div>
+            </div>
+            <div class="hero-feature-card">
+                <div class="hfc-icon green">🤝</div>
+                <div>
+                    <div class="hfc-title">Verified legal support</div>
+                    <div class="hfc-desc">Connect with NGOs and legal experts who specialize in women's rights.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══ EMERGENCY BANNER ═══════════════════════════════════════════ -->
+<div class="emergency-banner" role="complementary" aria-label="Emergency contact numbers">
+    <span class="label">🆘 Emergency Numbers</span>
+    <div class="sos-numbers">
+        <a href="tel:112" class="sos-chip"><span class="dot"></span> 112 — All Emergencies</a>
+        <a href="tel:1091" class="sos-chip"><span class="dot"></span> 1091 — Women Helpline</a>
+        <a href="tel:181" class="sos-chip"><span class="dot"></span> 181 — Complaint Line</a>
+        <a href="tel:100" class="sos-chip"><span class="dot"></span> 100 — Police</a>
+    </div>
+</div>
+
+<!-- ═══ RESOURCES ════════════════════════════════════════════════════ -->
+<section id="resources">
+    <div class="container">
+        <p class="section-eyebrow">Resources</p>
+        <h2 class="section-title">Everything you need, in one place</h2>
+        <p class="section-subtitle">From emergency contacts to legal aid — we've curated the most important safety tools for you.</p>
+        <div class="resources-grid">
+            <div class="resource-card">
+                <div class="rc-icon-wrap pink">📞</div>
+                <h3>Emergency Contacts</h3>
+                <p>A curated directory of national and local helplines, police contacts, and crisis centers available around the clock.</p>
+                <a href="#contacts" class="rc-link">View contacts <span class="arrow">→</span></a>
+            </div>
+            <div class="resource-card">
+                <div class="rc-icon-wrap purple">🥋</div>
+                <h3>Self-Defense Guides</h3>
+                <p>Practical, easy-to-follow self-defense techniques curated by certified instructors to help you feel confident in any situation.</p>
+                <a href="#self-defense" class="rc-link">Explore techniques <span class="arrow">→</span></a>
+            </div>
+            <div class="resource-card">
+                <div class="rc-icon-wrap blue">📱</div>
+                <h3>Recommended Safety Apps</h3>
+                <p>Vetted mobile applications that send alerts to loved ones, share your live location, and record incidents automatically.</p>
+                <a href="#apps" class="rc-link">Browse apps <span class="arrow">→</span></a>
+            </div>
+            <div class="resource-card">
+                <div class="rc-icon-wrap pink">⚖️</div>
+                <h3>Legal Rights & Aid</h3>
+                <p>Know your rights under Indian law. Find legal aid organizations who will take up your case and guide you through the process.</p>
+                <a href="#legal" class="rc-link">Learn more <span class="arrow">→</span></a>
+            </div>
+            <div class="resource-card">
+                <div class="rc-icon-wrap purple">💬</div>
+                <h3>Counseling & Support</h3>
+                <p>Access trained counselors and peer support groups who provide confidential emotional support whenever you need it.</p>
+                <a href="#counseling" class="rc-link">Get support <span class="arrow">→</span></a>
+            </div>
+            <div class="resource-card">
+                <div class="rc-icon-wrap blue">🗺️</div>
+                <h3>Safe Route Finder</h3>
+                <p>Community-powered route recommendations that highlight well-lit, populated paths so you can travel with greater confidence.</p>
+                <a href="/route_finder" class="rc-link">Open route finder <span class="arrow">→</span></a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══ MISSION ══════════════════════════════════════════════════════ -->
+<section id="mission">
+    <div class="container">
+        <div class="mission-inner">
+            <div class="mission-text">
+                <p class="section-eyebrow" style="color: var(--pink-400);">Our Mission</p>
+                <h2 class="section-title">Safety is not a privilege — it's a right</h2>
+                <p class="section-subtitle">We believe every woman deserves to live, work, and move freely without fear. SafeGuard was built to close the gap between danger and help.</p>
+                <div class="mission-values">
+                    <div class="value-row">
+                        <span class="value-icon">🛡️</span>
+                        <div>
+                            <div class="value-title">Privacy-first by design</div>
+                            <div class="value-desc">All reports and personal data are encrypted and never shared without consent.</div>
+                        </div>
+                    </div>
+                    <div class="value-row">
+                        <span class="value-icon">⚡</span>
+                        <div>
+                            <div class="value-title">Fast, reliable response</div>
+                            <div class="value-desc">Our platform connects to local authorities and NGOs within minutes of a report.</div>
+                        </div>
+                    </div>
+                    <div class="value-row">
+                        <span class="value-icon">🌍</span>
+                        <div>
+                            <div class="value-title">Community-powered</div>
+                            <div class="value-desc">Safety data and route ratings are contributed by a network of thousands of women.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="mission-visual">
+                <div class="stat-showcase">
+                    <div class="stat-box">
+                        <div class="stat-box-num">98%</div>
+                        <div class="stat-box-label">Complaint follow-up rate</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-box-num">&lt;2min</div>
+                        <div class="stat-box-label">Average response time</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-box-num">50+</div>
+                        <div class="stat-box-label">NGO partners</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-box-num">10K+</div>
+                        <div class="stat-box-label">Women supported</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══ SAFETY TIPS ══════════════════════════════════════════════════ -->
+<section id="tips">
+    <div class="container">
+        <p class="section-eyebrow">Safety Tips</p>
+        <h2 class="section-title">Practical ways to stay safer</h2>
+        <div class="tips-tabs" role="tablist">
+            <button class="tip-tab active" onclick="showTips('street')" role="tab" aria-selected="true">🚶 On the street</button>
+            <button class="tip-tab" onclick="showTips('digital')" role="tab" aria-selected="false">💻 Digital safety</button>
+            <button class="tip-tab" onclick="showTips('travel')" role="tab" aria-selected="false">✈️ While travelling</button>
+            <button class="tip-tab" onclick="showTips('home')" role="tab" aria-selected="false">🏠 At home</button>
+        </div>
+        <div class="tips-grid" id="tips-grid" role="tabpanel"></div>
+    </div>
+</section>
+
+<!-- ═══ NEWSLETTER ════════════════════════════════════════════════════ -->
+<section id="subscribe">
+    <div class="container">
+        <div class="subscribe-card">
+            <h2>Join the SafeGuard community</h2>
+            <p>Get weekly safety updates, new resources, and community alerts — directly in your inbox.</p>
+            <div class="subscribe-form" role="search">
+                <input type="email" id="subscribe-email" placeholder="Enter your email address" aria-label="Email address">
+                <button onclick="handleSubscribe()">Subscribe</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══ FOOTER ════════════════════════════════════════════════════════ -->
+<footer>
+    <div class="footer-inner">
+        <div class="footer-brand">
+            <div class="nav-logo" style="display:inline-flex; text-decoration:none;">
+                <div class="nav-logo-icon">S</div>
+                <span style="font-family: var(--font-display); font-weight:700; font-size:1.1rem; margin-left: 0.6rem;">SafeGuard</span>
+            </div>
+            <p class="footer-tagline">Empowering women's safety across India.</p>
+        </div>
+        <div class="footer-links">
+            <a href="#privacy">Privacy Policy</a>
+            <a href="#terms">Terms of Service</a>
+            <a href="#contact">Contact Us</a>
+            <a href="#careers">Volunteer</a>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <span>© 2025 Women Safety Hub — SafeGuard. All rights reserved.</span>
+        <span>Made with 💗 for women's safety</span>
+    </div>
+</footer>
+
+<!-- ═══ SCRIPTS ═══════════════════════════════════════════════════════ -->
+<script>
+    /* ── Nav scroll effect ── */
+    const nav = document.getElementById('main-nav');
+    window.addEventListener('scroll', () => {
+        nav.classList.toggle('scrolled', window.scrollY > 60);
+    }, { passive: true });
+
+    /* ── Modal ── */
+    window.onload = function() {
+        document.getElementById('complaint-modal').classList.add('open');
+        document.body.classList.add('modal-open');
+    };
+    function closeModal() {
+        document.getElementById('complaint-modal').classList.remove('open');
+        document.body.classList.remove('modal-open');
+    }
+    document.getElementById('complaint-modal').addEventListener('click', function(e) {
+        if (e.target === this) closeModal();
+    });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+    /* ── Form submission ── */
+    document.querySelectorAll('.complaint-form').forEach(form => {
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = form.querySelector('button[type="submit"]');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '⏳ Submitting...';
+            btn.disabled = true;
+            const formData = new FormData(form);
+            formData.append('title', 'Instant Complaint');
+            formData.append('category', 'Safety');
+            try {
+                const response = await fetch('/api/complaints', { method: 'POST', body: formData });
+                const result = await response.json();
+                if (result.success) {
+                    btn.innerHTML = '✅ Submitted!';
+                    btn.style.background = '#059669';
+                    setTimeout(() => { form.reset(); closeModal(); btn.innerHTML = originalText; btn.disabled = false; btn.style.background = ''; }, 1800);
+                } else {
+                    alert('Error: ' + result.error);
+                    btn.innerHTML = originalText; btn.disabled = false;
+                }
+            } catch (err) {
+                console.error(err);
+                alert('An error occurred. Please try again.');
+                btn.innerHTML = originalText; btn.disabled = false;
+            }
+        });
+    });
+
+    /* ── Safety Tips tabs ── */
+    const tipsData = {
+        street: [
+            { title: 'Stay aware of your surroundings', desc: 'Avoid using your phone while walking alone. Keep your head up and note who is around you.' },
+            { title: 'Trust your instincts', desc: 'If a situation feels wrong, it probably is. Move toward a crowded place or enter a shop.' },
+            { title: 'Share your location', desc: 'Tell a trusted contact where you\'re going and when you expect to arrive whenever traveling alone.' },
+            { title: 'Walk with confidence', desc: 'Walk at a steady pace, making occasional eye contact. Hesitation can attract unwanted attention.' },
+            { title: 'Know your nearest safe spots', desc: 'Identify police posts, hospitals, and busy shops on your regular routes before you need them.' },
+            { title: 'Use safety apps', desc: 'Keep a personal safety app ready with an SOS button that alerts your emergency contacts instantly.' }
+        ],
+        digital: [
+            { title: 'Use strong, unique passwords', desc: 'Use a different password for every account and enable two-factor authentication wherever possible.' },
+            { title: 'Review app permissions', desc: 'Regularly audit which apps can access your camera, microphone, and location data.' },
+            { title: 'Be cautious online', desc: 'Don\'t share your live location, home address, or daily schedule on public social media.' },
+            { title: 'Block and report harassment', desc: 'Use platform tools to immediately block and report anyone who makes you feel unsafe online.' },
+            { title: 'Secure your devices', desc: 'Set screen locks on your phone and laptop. Enable remote wipe in case a device is lost or stolen.' },
+            { title: 'Check for tracking', desc: 'Periodically check for unfamiliar Bluetooth devices or apps that may be tracking your location.' }
+        ],
+        travel: [
+            { title: 'Research before you go', desc: 'Check safety conditions for your destination, including areas to avoid and local emergency numbers.' },
+            { title: 'Book verified transport', desc: 'Use official taxis or app-based rides with driver identification. Note the vehicle number before getting in.' },
+            { title: 'Keep documents secure', desc: 'Store copies of your ID, passport, and visa separately from the originals. Keep digital backups.' },
+            { title: 'Stay in reputable accommodations', desc: 'Read reviews specifically about safety and security. Let the reception know if you\'re travelling alone.' },
+            { title: 'Blend in locally', desc: 'Dress and act in a way that doesn\'t draw undue attention. Learn a few key phrases in the local language.' },
+            { title: 'Have emergency contacts ready', desc: 'Save the local police, embassy, and a trusted person\'s number before arriving at your destination.' }
+        ],
+        home: [
+            { title: 'Secure all entry points', desc: 'Ensure doors and windows have functioning locks. Consider a door chain or reinforcement bar for extra security.' },
+            { title: 'Know your neighbors', desc: 'A network of aware neighbors significantly increases home safety. Share contact information with those you trust.' },
+            { title: 'Don\'t announce when you\'re away', desc: 'Avoid posting travel plans publicly. Ask a trusted neighbor to pick up mail and vary your lights.' },
+            { title: 'Install safety lighting', desc: 'Motion-activated lights at entry points deter unwanted visitors and make you feel safer returning home at night.' },
+            { title: 'Have a safety plan', desc: 'Know what you\'d do and where you\'d go in an emergency. Practice with family members if applicable.' },
+            { title: 'Trust your gut at home', desc: 'If something feels off — a strange noise, unfamiliar person — don\'t second-guess yourself. Call for help.' }
+        ]
+    };
+    function showTips(category) {
+        document.querySelectorAll('.tip-tab').forEach((t, i) => {
+            t.classList.remove('active');
+            t.setAttribute('aria-selected', 'false');
+        });
+        event.target.classList.add('active');
+        event.target.setAttribute('aria-selected', 'true');
+        const grid = document.getElementById('tips-grid');
+        grid.innerHTML = '';
+        tipsData[category].forEach((tip, i) => {
+            grid.innerHTML += `
+                <div class="tip-card">
+                    <div class="tip-num">${i + 1}</div>
+                    <div>
+                        <h4>${tip.title}</h4>
+                        <p>${tip.desc}</p>
+                    </div>
+                </div>`;
+        });
+    }
+    showTips('street');
+
+    /* ── Subscribe ── */
+    function handleSubscribe() {
+        const input = document.getElementById('subscribe-email');
+        const email = input.value.trim();
+        if (!email || !/\S+@\S+\.\S+/.test(email)) {
+            input.style.borderLeft = '3px solid #ef4444';
+            input.focus();
+            return;
+        }
+        input.style.borderLeft = '';
+        const btn = input.nextElementSibling;
+        btn.textContent = '✓ Subscribed!';
+        btn.style.background = '#059669';
+        btn.style.color = 'white';
+        input.value = '';
+        setTimeout(() => { btn.textContent = 'Subscribe'; btn.style.background = ''; btn.style.color = ''; }, 3000);
+    }
+
+    /* ── Smooth scroll ── */
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+        a.addEventListener('click', e => {
+            const target = document.querySelector(a.getAttribute('href'));
+            if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+        });
+    });
+</script>
+</body>
+</html>
